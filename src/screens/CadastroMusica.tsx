@@ -13,35 +13,37 @@ function CadastroMusica(): React.JSX.Element {
     const [ano_lancamento, setAno_lancamento] = useState<string>('');
     const [album, setAlbum] = useState<string>('');
 
-   /* const cadastrarCliente = async () => {
-        try {
-            const formData = new FormData();
-            formData.append('titulo', titulo);
-            formData.append('duracao', duracao);
-            formData.append('artista', artista);
-            formData.append('genero', genero);
-            formData.append('nacionalidade', nacionalidade);
-            formData.append('ano_lancamento', ano_lancamento);
-            formData.append('album', album);
+    
 
-            console.log(formData);
-            const response = await axios.post('http://10.137.11.223:8000/api/cadastro/musica', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            if (response.status == 200) {
-                    console.log("cadastrado")
-            }
-            else {
-                console.log("Cliente não cadastrado");
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }*/
+    /* const cadastrarCliente = async () => {
+         try {
+             const formData = new FormData();
+             formData.append('titulo', titulo);
+             formData.append('duracao', duracao);
+             formData.append('artista', artista);
+             formData.append('genero', genero);
+             formData.append('nacionalidade', nacionalidade);
+             formData.append('ano_lancamento', ano_lancamento);
+             formData.append('album', album);
+ 
+             console.log(formData);
+             const response = await axios.post('http://10.137.11.223:8000/api/cadastro/musica', formData, {
+                 headers: {
+                     'Content-Type': 'multipart/form-data'
+                 }
+             });
+             if (response.status == 200) {
+                     console.log("cadastrado")
+             }
+             else {
+                 console.log("Cliente não cadastrado");
+             }
+         } catch (error) {
+             console.log(error);
+         }
+     }*/
 
-  
+
     const [isButton1Pressed, setIsButton1Pressed] = useState(false);
 
     const handleButton1Press = () => {
@@ -52,13 +54,13 @@ function CadastroMusica(): React.JSX.Element {
         setIsButton1Pressed(false);
     };
     return (
-        
+
 
 
         <View style={styles.container}>
             <View style={styles.containerHeader}>
 
-                <Text style={styles.message}>Musicas</Text>
+                <Text style={styles.message}>Cadastro de Musica</Text>
             </View>
 
             <View style={styles.containerForm}>
@@ -95,6 +97,42 @@ function CadastroMusica(): React.JSX.Element {
                         value={duracao}
                         onChangeText={setDuracao}
                     />
+                    <TextInput
+                        placeholder="Artista"
+                        placeholderTextColor={'#fff'}
+                        style={styles.input}
+                        value={artista}
+                        onChangeText={setArtista}
+                    />
+                    <TextInput
+                        placeholder="Genero"
+                        placeholderTextColor={'#fff'}
+                        style={styles.inputPassword}
+                        value={genero}
+                        onChangeText={setGenero}
+                    />
+                    <TextInput
+                        placeholder="Nacionalidade"
+                        placeholderTextColor={'#fff'}
+                        style={styles.input}
+                        value={nacionalidade}
+                        onChangeText={setNacionalidade}
+                    />
+                    <TextInput
+                        placeholder="Ano de Lançamento"
+                        placeholderTextColor={'#fff'}
+                        style={styles.inputPassword}
+                        value={ano_lancamento}
+                        onChangeText={setAno_lancamento}
+                        
+                    /> <TextInput
+                        placeholder="Album"
+                        placeholderTextColor={'#fff'}
+                        style={styles.input}
+                        value={album}
+                        onChangeText={setAlbum}
+                    />
+
 
                     <TouchableOpacity style={styles.buttonll}><Text style={styles.buttonllText}>Entrar</Text></TouchableOpacity>
 
@@ -131,9 +169,7 @@ const styles = StyleSheet.create({
     containerForm: {
         backgroundColor: '#171717',
 
-        flex: 1,
-        borderTopLeftRadius: 25,
-        borderTopRightRadius: 25,
+        flex: 1,    
         paddingStart: '5%',
         paddingEnd: '5%',
         //justifyContent: 'center'
