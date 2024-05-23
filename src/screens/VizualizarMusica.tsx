@@ -1,7 +1,6 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-
+import React, { useEffect, useState } from "react"
 
 import { FlatList, Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
@@ -9,94 +8,138 @@ import { FlatList, Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpaci
 interface Musica {
 
     id: number;
-    titulo:string;
-    duracao:number;
-    artista:string;
-    genero:string;
-    nacionalidade:string;
-    ano_lancamento:string;
-    album:string;
+    titulo: string;
+    duracao: number;
+    artista: string;
+    genero: string;
+    nacionalidade: string;
+    ano_lancamento: string;
+    album: string;
 }
 
-const renderItem = ({ item }: { item:Musica}) => (
-   
-    
-        
-        <View style={styles.container}>
+const renderItem = ({ item }: { item: Musica }) => (
 
-            <Text style={styles.headerText}>{item.artista}</Text>
-         {item.titulo}
-         
-         {item.genero}
-        
+
+
+
+
+
+    <View style={styles.form}>
+        <View style={styles.card}>
+            <Image style={styles.imagem} source={require('../images/logo.png')} />
+            <View style={styles.column}><Text style={styles.titulo}>{item.titulo}</Text>
+
+                <Text style={styles.artista}>{item.artista}</Text></View>
+            <TouchableOpacity style={styles.alignConfig}><Image style={styles.configIcon} source={require('../images/config.png')} /></TouchableOpacity>
+
         </View>
 
-       
-   
+    </View>
+
+
+
+
+
+
 );
 
 function VizualizarMusica(): React.JSX.Element {
-    const [musicas, setMusicas] = useState<Musica[]>([]);
+    const [musicas, setMusicas] = useState<any[]>([]);
 
     //const navigation = useNavigation();
     //const route = useRoute();
 
     useEffect(() => {
         listarMusicas();
-    }, []); 
+    }, []);
 
     const listarMusicas = async () => {
         try {
-            const response = await axios.get('http://10.137.11.223:8000/api/vizualizar/produtos');
-            if (response.status === 200) {
-                setMusicas(response.data); 
-                 console.log(response.data);
-            }
-            
+            const response = await axios.get('http://10.137.11.224:8000/api/vizualizar/musica');
+            setMusicas(response.data.data);
+            console.log(musicas)
+            console.log(response.data)
+
+
         } catch (error) {
-            
+
             console.log(error);
         }
     }
 
-  
-
-    
-
     return (
+
+
         <View style={styles.container}>
-             <FlatList
+            <View style={styles.header}>
+                <View style={styles.row}>
+                    <Text style={styles.headerText}>
+                        Playlist
+                    </Text>
+
+                    <TextInput placeholder="Search Music" placeholderTextColor={'grey'} style={styles.inputSearch}></TextInput>
+                </View>
+
+            </View>
+            <FlatList
                 showsVerticalScrollIndicator={false}
                 data={musicas}
                 renderItem={renderItem}
-                keyExtractor={(item) => item.titulo}
-               
+                keyExtractor={(item) => item.id.toString()}
             />
-        </View> 
-              
-);
-    
+
+            {/*
+            <View style={styles.form}>
+                <View style={styles.card}>
+                    <View style={styles.imagem}></View>
+                    <View style={styles.column}><Text style={styles.titulo}>sevzse</Text>
+
+                        <Text style={styles.artista}>zsdv\se</Text></View>
+                    <TouchableOpacity style={styles.alignConfig}><Image style={styles.configIcon} source={require('../images/config.png')} /></TouchableOpacity>
+
+                </View>
+
+            </View>*/}
+        </View>
+
+    );
+
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor:'red'
+        backgroundColor: 'white'
     },
     header: {
-        backgroundColor: 'red',
+        backgroundColor: '#292838',
         paddingVertical: 10,
-        alignItems: 'center'
+        alignItems: 'flex-start',
+
+        height: 150
     },
     headerText: {
-        fontSize: 20,
+        fontSize: 50,
+        fontWeight: '600',
+        color: 'white',
+        fontFamily: 'Nunito',
+        left: 10,
+    },
+    titulo: {
+        fontSize: 25,
         fontWeight: 'bold',
-        color: 'white'
+        color: 'white',
+
+    },
+    artista: {
+        fontSize: 14,
+        color: 'white',
+
+
     },
     form: {
-        padding: 10,
-        backgroundColor: '#f0f0f0',
-        marginBottom: 10
+
+        marginBottom: 0
     },
     input: {
         height: 40,
@@ -140,6 +183,59 @@ const styles = StyleSheet.create({
     },
     menuList: {
         flexGrow: 1
+    },
+    card: {
+        flexDirection: 'row',
+        width: 'auto',
+        height: 80,
+        backgroundColor: '#4a4956',
+        padding: 10,
+        borderBottomWidth: 1,
+        borderColor: '#5A56B9'
+    },
+    imagem: {
+        width: 60,
+        height: 60,
+        borderRadius: 5,
+        backgroundColor: 'white',
+        marginRight: 5
+    },
+    column: {
+        flexDirection: 'column'
+    },
+    configIcon: {
+
+        width: 30,
+        height: 30,
+
+    },
+    alignConfig: {
+        position: 'absolute',
+        right: 10,
+        top: 25
+    },
+    inputSearch: {
+        width: 200,
+        height: 50,
+        borderWidth: 1,
+        borderColor: 'black',
+        borderRadius: 20,
+        backgroundColor: 'black',
+        color: 'grey',
+        paddingLeft: 60,
+        fontSize: 20,
+        marginLeft: 20,
+        marginTop: 20
+    },
+    row: {
+        flexDirection: 'row'
+    },
+    inputSearchImage: {
+        width: 35,
+        height: 35,
+        left:10
+        
+        
     }
 
 })
