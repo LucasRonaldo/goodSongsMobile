@@ -6,7 +6,7 @@ import { Alert, Image, ScrollView, StyleSheet, Text, TextInput, TouchableHighlig
 
 
 
-function SignIn(): React.JSX.Element {
+function Cadastro(): React.JSX.Element {
     const [musicas, setMusicas] = useState<Musica[]>([]);
     const [titulo, setTitulo] = useState<string>('');
     const [duracao, setDuracao] = useState<string>('');
@@ -326,4 +326,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SignIn;
+export default Cadastro;

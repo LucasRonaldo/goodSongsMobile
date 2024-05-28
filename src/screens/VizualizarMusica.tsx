@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react"
 
 import { FlatList, Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import Footer from "./Footer";
 
 
 interface Musica {
@@ -26,7 +27,7 @@ const renderItem = ({ item }: { item: Musica }) => (
 
     <View style={styles.form}>
         <View style={styles.card}>
-            <Image style={styles.imagem} source={require('../images/logo.png')} />
+            <Image style={styles.imagem} source={require('../images/musica.png')} />
             <View style={styles.column}><Text style={styles.titulo}>{item.titulo}</Text>
 
                 <Text style={styles.artista}>{item.artista}</Text></View>
@@ -35,12 +36,6 @@ const renderItem = ({ item }: { item: Musica }) => (
         </View>
 
     </View>
-
-
-
-
-
-
 );
 
 function VizualizarMusica(): React.JSX.Element {
@@ -55,7 +50,7 @@ function VizualizarMusica(): React.JSX.Element {
 
     const listarMusicas = async () => {
         try {
-            const response = await axios.get('http://10.137.11.224:8000/api/vizualizar/musica');
+            const response = await axios.get('http://10.137.11.223:8000/api/vizualizar/musica');
             setMusicas(response.data.data);
             console.log(musicas)
             console.log(response.data)
@@ -81,12 +76,20 @@ function VizualizarMusica(): React.JSX.Element {
                 </View>
 
             </View>
-            <FlatList
-                showsVerticalScrollIndicator={false}
-                data={musicas}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.id.toString()}
-            />
+            {musicas.length === 0? (
+        <View style={styles.noItemsContainer}>
+          <Text style={styles.noItemsText}>Não há nenhum registro</Text>
+        </View>
+      ) : (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={musicas}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+        />
+      )}
+
+            <Footer/>
 
             {/*
             <View style={styles.form}>
@@ -109,7 +112,7 @@ function VizualizarMusica(): React.JSX.Element {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: '#292838'
     },
     header: {
         backgroundColor: '#292838',
@@ -197,7 +200,7 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
         borderRadius: 5,
-        backgroundColor: 'white',
+        backgroundColor: '#292838',
         marginRight: 5
     },
     column: {
@@ -236,7 +239,16 @@ const styles = StyleSheet.create({
         left:10
         
         
-    }
+    },noItemsContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+      },
+      noItemsText: {
+        fontSize: 18,
+        color: '#999',
+      },
 
 })
 
