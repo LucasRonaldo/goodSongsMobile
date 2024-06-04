@@ -2,7 +2,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import axios from "axios";
 import React, { useEffect, useState } from "react"
 
-import { FlatList, Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Modal, Pressable, Alert, FlatList, Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Footer from "./Footer";
 
 
@@ -18,20 +18,56 @@ interface Musica {
     album: string;
 }
 
+
+  const navigation = useNavigation();
+  const [musicas, setMusicas] = useState<Musica[]>([]);
+
+
+const buscar = async () => {
+
+        try {
+            const response = await axios.post('http://10.137.11.232:8000/api/pesquisar/musica/titulo' + musicas);
+            console.log('buscando os carros')
+           
+            
+            if (response.data.status === true) {
+                setMusicas(response.data.data)
+            } else {
+                console.log('Erro na busca:', response.data.message);
+            }
+        } catch (error) {
+            console.log('Erro na requisição:', error);
+        }
+    };
+
+
+
+const Delete = async (id: number) => {
+    
+    axios.delete('http://10.137.11.223:8000/api/delete/musica/' + id).then(function (response) {
+
+
+    
+    if(response.status === 200){
+       Alert.alert('Musica Excluida com sucesso')
+    }
+        
+     }
+    ).catch(function (error) {
+      console.log(error)
+    })
+  }
 const renderItem = ({ item }: { item: Musica }) => (
-
-
-
-
-
-
     <View style={styles.form}>
         <View style={styles.card}>
             <Image style={styles.imagem} source={require('../images/musica.png')} />
             <View style={styles.column}><Text style={styles.titulo}>{item.titulo}</Text>
 
                 <Text style={styles.artista}>{item.artista}</Text></View>
-            <TouchableOpacity style={styles.alignConfig}><Image style={styles.configIcon} source={require('../images/config.png')} /></TouchableOpacity>
+
+                <TouchableOpacity onPress={()=>navigation.navigate('Update', { item })} style={styles.alignConfig}><Image style={styles.configEdit} source={require('../images/edit.png')} /></TouchableOpacity>
+            <TouchableOpacity onPress={()=>Delete(item.id)} style={styles.alignEdit}><Image style={styles.configDelete} source={require('../images/deletee.png')} /></TouchableOpacity>
+
 
         </View>
 
@@ -44,16 +80,17 @@ function VizualizarMusica(): React.JSX.Element {
     //const navigation = useNavigation();
     //const route = useRoute();
 
-    useEffect(() => {
-        listarMusicas();
-    }, []);
+   
 
     const listarMusicas = async () => {
         try {
             const response = await axios.get('http://10.137.11.223:8000/api/vizualizar/musica');
-            setMusicas(response.data.data);
-            console.log(musicas)
-            console.log(response.data)
+
+            if(response.status === 200){
+                setMusicas(response.data.data);
+            }
+           
+          
 
 
         } catch (error) {
@@ -61,6 +98,10 @@ function VizualizarMusica(): React.JSX.Element {
             console.log(error);
         }
     }
+    useEffect(() => {
+        listarMusicas();
+    }, []);
+     
 
     return (
 
@@ -98,7 +139,7 @@ function VizualizarMusica(): React.JSX.Element {
                     <View style={styles.column}><Text style={styles.titulo}>sevzse</Text>
 
                         <Text style={styles.artista}>zsdv\se</Text></View>
-                    <TouchableOpacity style={styles.alignConfig}><Image style={styles.configIcon} source={require('../images/config.png')} /></TouchableOpacity>
+                    <TouchableOpacity style={styles.alignConfig}><Image style={styles.configDelete} source={require('../images/config.png')} /></TouchableOpacity>
 
                 </View>
 
@@ -206,7 +247,12 @@ const styles = StyleSheet.create({
     column: {
         flexDirection: 'column'
     },
-    configIcon: {
+    configDelete: {
+
+        width: 30,
+        height: 30,
+
+    },configEdit: {
 
         width: 30,
         height: 30,
@@ -215,6 +261,11 @@ const styles = StyleSheet.create({
     alignConfig: {
         position: 'absolute',
         right: 10,
+        top: 25
+    },
+    alignEdit: {
+        position: 'absolute',
+        right: 50,
         top: 25
     },
     inputSearch: {
