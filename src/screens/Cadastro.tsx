@@ -17,16 +17,7 @@ function Cadastro(): React.JSX.Element {
     const [album, setAlbum] = useState<string>('');
     const colorInput = '#acacb7'
 
-    const [isHovered, setIsHovered] = useState(false);
-    const [isButton1Pressed, setIsButton1Pressed] = useState(false);
-
-    const handleButton1Press = () => {
-        setIsButton1Pressed(true);
-    };
-
-    const handleButton2Press = () => {
-        setIsButton1Pressed(false);
-    };
+   
     
 
 
@@ -314,7 +305,7 @@ const styles = StyleSheet.create({
     buttonllText: {
         color: '#002f6c',
         fontSize: 20
-    }
+    },
 });
 
 export default Cadastro;
