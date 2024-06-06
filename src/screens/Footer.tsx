@@ -9,12 +9,12 @@ function Footer(): React.JSX.Element{
     const navigation = useNavigation();
     return(
         <View style={styles.footer}>
-           <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
+          {/* <TouchableOpacity onPress={()=>navigation.navigate('Welcome')}>
             <Image source={require('../images/home2.png') } 
              style={styles.footerIcon}/>
-           </TouchableOpacity>
+           </TouchableOpacity>*/}
            
-           <TouchableOpacity onPress={()=>navigation.navigate('Vizualizar')}>
+           <TouchableOpacity onPress={()=>navigation.navigate('Visualizar')}>
             <Image source={require('../images/list.png') } style={styles.footerIcon} />
            </TouchableOpacity>
            <TouchableOpacity onPress={()=>navigation.navigate('Cadastro')}>

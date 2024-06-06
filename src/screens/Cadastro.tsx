@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Alert, Image, ScrollView, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import Footer from './Footer';
 
 
 
@@ -63,22 +64,7 @@ function Cadastro(): React.JSX.Element {
 
                 <ScrollView style={styles.card}>
 
-                    {/* <View style={styles.buttonEntrar}>
-                        <TouchableOpacity
-                            style={[styles.button, isButton1Pressed ? styles.buttonPressed : null]}
-                            onPress={handleButton1Press}
-                        >
-                            <Text style={styles.buttonText}>Cadastro</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[styles.button, !isButton1Pressed ? styles.buttonPressed : null]}
-                            onPress={handleButton2Press}
-                        >
-                            <Text style={styles.buttonText}>Listagem</Text>
-                        </TouchableOpacity>
-                    </View>
-
-    */ }
+                   
 
 
                     <TextInput
@@ -146,7 +132,9 @@ function Cadastro(): React.JSX.Element {
 
 
                 </ScrollView>
+                <Footer/>
             </View>
+            
         </View>
     );
 }

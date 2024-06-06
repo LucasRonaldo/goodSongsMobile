@@ -2,11 +2,12 @@ import React, { JSXElementConstructor } from 'react';
 import { Text, View } from 'react-native';
 
 
-import VizualizarMusica from './src/screens/VizualizarMusica';
+import VisualizarMusica from './src/screens/VisualizarMusica';
 import Editar from './src/screens/Editar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Cadastro from './src/screens/Cadastro';
+import Welcome from './src/screens/Welcome';
 
 const Stack = createStackNavigator();
 
@@ -15,7 +16,8 @@ function App():JSX.Element{
   return(
     <NavigationContainer>
     <Stack.Navigator>
-      <Stack.Screen name='Vizualizar' component={VizualizarMusica} options={{headerShown:false}} />
+    <Stack.Screen name='Welcome' component={Welcome} options={{headerShown:false}} />
+      <Stack.Screen name='Visualizar' component={VisualizarMusica} options={{headerShown:false}} />
       <Stack.Screen name='Cadastro' component={Cadastro} options={{headerShown:false}} />
       <Stack.Screen name='Update' component={Editar} options={{headerShown:false}} />
       

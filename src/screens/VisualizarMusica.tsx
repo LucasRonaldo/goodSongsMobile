@@ -15,7 +15,7 @@ interface Musica {
     album: string;
 }
 
-function VizualizarMusica(): React.JSX.Element {
+function VisualizarMusica(): React.JSX.Element {
     const [musicas, setMusicas] = useState<Musica[]>([]);
     const navigation = useNavigation();
 
@@ -46,7 +46,7 @@ function VizualizarMusica(): React.JSX.Element {
 
     const listarMusicas = async () => {
         try {
-            const response = await axios.get('http://10.137.11.223:8000/api/vizualizar/musica');
+            const response = await axios.get('http://10.137.11.223:8000/api/visualizar/musica');
             if (response.status === 200) {
                 setMusicas(response.data.data);
             }
@@ -61,7 +61,7 @@ function VizualizarMusica(): React.JSX.Element {
 
     const renderItem = ({ item }: { item: Musica }) => (
         <View style={styles.form}>
-            <View style={styles.card}>
+            <TouchableOpacity style={styles.card}>
                 <Image style={styles.imagem} source={require('../images/musica.png')} />
                 <View style={styles.column}>
                     <Text style={styles.titulo}>{item.titulo}</Text>
@@ -73,7 +73,7 @@ function VizualizarMusica(): React.JSX.Element {
                 <TouchableOpacity onPress={() => Delete(item.id)} style={styles.alignEdit}>
                     <Image style={styles.configDelete} source={require('../images/deletee.png')} />
                 </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
         </View>
     );
 
@@ -116,8 +116,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#292838',
         paddingVertical: 10,
         alignItems: 'flex-start',
-
-        height: 150
+        height: 100,
     },
     headerText: {
         fontSize: 50,
@@ -233,7 +232,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         backgroundColor: 'black',
         color: 'grey',
-        paddingLeft: 60,
+        paddingLeft: 20,
         fontSize: 20,
         marginLeft: 20,
         marginTop: 20
@@ -260,4 +259,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default VizualizarMusica;
+export default VisualizarMusica;
