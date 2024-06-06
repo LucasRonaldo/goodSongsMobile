@@ -18,6 +18,7 @@ interface Musica {
 function VisualizarMusica(): React.JSX.Element {
     const [musicas, setMusicas] = useState<Musica[]>([]);
     const navigation = useNavigation();
+    
 
     const buscar = async (titulo: string) => {
         try {
@@ -61,7 +62,7 @@ function VisualizarMusica(): React.JSX.Element {
 
     const renderItem = ({ item }: { item: Musica }) => (
         <View style={styles.form}>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('DetalhesMusica', { musica: item })}>
                 <Image style={styles.imagem} source={require('../images/musica.png')} />
                 <View style={styles.column}>
                     <Text style={styles.titulo}>{item.titulo}</Text>
