@@ -21,7 +21,7 @@ function VizualizarMusica(): React.JSX.Element {
 
     const buscar = async () => {
         try {
-            const response = await axios.post('http://10.137.11.232:8000/api/pesquisar/musica/titulo', { titulo: '' }); // Corrigido URL e payload
+            const response = await axios.post('http://10.137.11.232:8000/api/pesquisar/musica/titulo', { titulo: '' }); 
             console.log('buscando os carros');
             if (response.data.status === true) {
                 setMusicas(response.data.data);
@@ -38,7 +38,7 @@ function VizualizarMusica(): React.JSX.Element {
             if(response.status === 200) {
                 Alert.alert('Musica Excluida com sucesso');
             }
-        }).catch(function (error) {
+        }).catch(function (error) { 
             console.log(error);
         });
     };

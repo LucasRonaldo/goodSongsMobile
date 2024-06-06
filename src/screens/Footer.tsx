@@ -13,13 +13,11 @@ function Footer(): React.JSX.Element{
             <Image source={require('../images/home2.png') } 
              style={styles.footerIcon}/>
            </TouchableOpacity>
-           <TouchableOpacity onPress={()=>navigation.navigate('update')} >
-            <Image source={require('../images/search.png')} style={styles.footerIcon} />
-           </TouchableOpacity>
-           <TouchableOpacity>
+           
+           <TouchableOpacity onPress={()=>navigation.navigate('Vizualizar')}>
             <Image source={require('../images/list.png') } style={styles.footerIcon} />
            </TouchableOpacity>
-           <TouchableOpacity onPress={()=>navigation.navigate('Profile')}>
+           <TouchableOpacity onPress={()=>navigation.navigate('Cadastro')}>
             <Image source={require('../images/profile2.png') } style={styles.footerIcon} />
            </TouchableOpacity>
         </View>

@@ -27,16 +27,7 @@ function Cadastro(): React.JSX.Element {
     const handleButton2Press = () => {
         setIsButton1Pressed(false);
     };
-    /*
-           // Função para navegar para a tela de login
-           const navigateToLogin = () => {
-            navigation.navigate('Login'); // Nome da tela de login
-        };
     
-        // Função para navegar para a tela de cadastro
-        const navigateToSignUp = () => {
-            navigation.navigate('SignUp'); // Nome da tela de cadastro
-        };*/
 
 
     const cadastrarMusica = async () => {
@@ -65,7 +56,7 @@ function Cadastro(): React.JSX.Element {
 
             }
             else {
-                console.log("Musica não cadastrada");
+                console.log("Musica não foi cadastrada");
             }
         } catch (error) {
             console.log(error);
