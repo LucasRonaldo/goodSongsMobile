@@ -1,13 +1,10 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import React, { useEffect, useState } from "react"
-
+import React, { useEffect, useState } from "react";
 import { Modal, Pressable, Alert, FlatList, Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Footer from "./Footer";
 
-
 interface Musica {
-
     id: number;
     titulo: string;
     duracao: number;
@@ -18,20 +15,16 @@ interface Musica {
     album: string;
 }
 
+function VizualizarMusica(): React.JSX.Element {
+    const [musicas, setMusicas] = useState<Musica[]>([]);
+    const navigation = useNavigation();
 
-  const navigation = useNavigation();
-  const [musicas, setMusicas] = useState<Musica[]>([]);
-
-
-const buscar = async () => {
-
+    const buscar = async () => {
         try {
-            const response = await axios.post('http://10.137.11.232:8000/api/pesquisar/musica/titulo' + musicas);
-            console.log('buscando os carros')
-           
-            
+            const response = await axios.post('http://10.137.11.232:8000/api/pesquisar/musica/titulo', { titulo: '' }); // Corrigido URL e payload
+            console.log('buscando os carros');
             if (response.data.status === true) {
-                setMusicas(response.data.data)
+                setMusicas(response.data.data);
             } else {
                 console.log('Erro na busca:', response.data.message);
             }
@@ -40,114 +33,72 @@ const buscar = async () => {
         }
     };
 
-
-
-const Delete = async (id: number) => {
-    
-    axios.delete('http://10.137.11.223:8000/api/delete/musica/' + id).then(function (response) {
-
-
-    
-    if(response.status === 200){
-       Alert.alert('Musica Excluida com sucesso')
-    }
-        
-     }
-    ).catch(function (error) {
-      console.log(error)
-    })
-  }
-const renderItem = ({ item }: { item: Musica }) => (
-    <View style={styles.form}>
-        <View style={styles.card}>
-            <Image style={styles.imagem} source={require('../images/musica.png')} />
-            <View style={styles.column}><Text style={styles.titulo}>{item.titulo}</Text>
-
-                <Text style={styles.artista}>{item.artista}</Text></View>
-
-                <TouchableOpacity onPress={()=>navigation.navigate('Update', { item })} style={styles.alignConfig}><Image style={styles.configEdit} source={require('../images/edit.png')} /></TouchableOpacity>
-            <TouchableOpacity onPress={()=>Delete(item.id)} style={styles.alignEdit}><Image style={styles.configDelete} source={require('../images/deletee.png')} /></TouchableOpacity>
-
-
-        </View>
-
-    </View>
-);
-
-function VizualizarMusica(): React.JSX.Element {
-    const [musicas, setMusicas] = useState<any[]>([]);
-
-    //const navigation = useNavigation();
-    //const route = useRoute();
-
-   
+    const Delete = async (id: number) => {
+        axios.delete(`http://10.137.11.223:8000/api/delete/musica/${id}`).then(function (response) {
+            if(response.status === 200) {
+                Alert.alert('Musica Excluida com sucesso');
+            }
+        }).catch(function (error) {
+            console.log(error);
+        });
+    };
 
     const listarMusicas = async () => {
         try {
             const response = await axios.get('http://10.137.11.223:8000/api/vizualizar/musica');
-
-            if(response.status === 200){
+            if(response.status === 200) {
                 setMusicas(response.data.data);
             }
-           
-          
-
-
         } catch (error) {
-
             console.log(error);
         }
-    }
+    };
+
     useEffect(() => {
         listarMusicas();
     }, []);
-     
+
+    const renderItem = ({ item }: { item: Musica }) => (
+        <View style={styles.form}>
+            <View style={styles.card}>
+                <Image style={styles.imagem} source={require('../images/musica.png')} />
+                <View style={styles.column}>
+                    <Text style={styles.titulo}>{item.titulo}</Text>
+                    <Text style={styles.artista}>{item.artista}</Text>
+                </View>
+                <TouchableOpacity onPress={() => navigation.navigate('Update', { item })} style={styles.alignConfig}>
+                    <Image style={styles.configEdit} source={require('../images/edit.png')} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => Delete(item.id)} style={styles.alignEdit}>
+                    <Image style={styles.configDelete} source={require('../images/deletee.png')} />
+                </TouchableOpacity>
+            </View>
+        </View>
+    );
 
     return (
-
-
         <View style={styles.container}>
             <View style={styles.header}>
                 <View style={styles.row}>
-                    <Text style={styles.headerText}>
-                        Playlist
-                    </Text>
-
+                    <Text style={styles.headerText}>Playlist</Text>
                     <TextInput placeholder="Search Music" placeholderTextColor={'grey'} style={styles.inputSearch}></TextInput>
                 </View>
-
             </View>
-            {musicas.length === 0? (
-        <View style={styles.noItemsContainer}>
-          <Text style={styles.noItemsText}>Não há nenhum registro</Text>
-        </View>
-      ) : (
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={musicas}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      )}
-
-            <Footer/>
-
-            {/*
-            <View style={styles.form}>
-                <View style={styles.card}>
-                    <View style={styles.imagem}></View>
-                    <View style={styles.column}><Text style={styles.titulo}>sevzse</Text>
-
-                        <Text style={styles.artista}>zsdv\se</Text></View>
-                    <TouchableOpacity style={styles.alignConfig}><Image style={styles.configDelete} source={require('../images/config.png')} /></TouchableOpacity>
-
+            {musicas.length === 0 ? (
+                <View style={styles.noItemsContainer}>
+                    <Text style={styles.noItemsText}>Não há nenhum registro</Text>
                 </View>
-
-            </View>*/}
+            ) : (
+                <FlatList
+                    showsVerticalScrollIndicator={false}
+                    data={musicas}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.id.toString()}
+                />
+            )}
+            <Footer/>
         </View>
-
     );
-
 }
 
 const styles = StyleSheet.create({

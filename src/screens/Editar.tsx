@@ -7,7 +7,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 interface Musica {
     id: number;
     titulo: string;
-    duracao: string;
+    duracao: number; // Alterado para number
     artista: string;
     genero: string;
     nacionalidade: string;
@@ -16,10 +16,9 @@ interface Musica {
 }
 
 const Editar: React.FC = () => {
-    const [musicas, setMusicas] = useState<Musica[]>([]);
-    const [id, setId] = useState<string>('');
+    const [id, setId] = useState<number>(0);
     const [titulo, setTitulo] = useState<string>('');
-    const [duracao, setDuracao] = useState<string>('');
+    const [duracao, setDuracao] = useState<number>(0);
     const [artista, setArtista] = useState<string>('');
     const [genero, setGenero] = useState<string>('');
     const [nacionalidade, setNacionalidade] = useState<string>('');
@@ -41,33 +40,33 @@ const Editar: React.FC = () => {
             setAno_lancamento(item.ano_lancamento);
             setAlbum(item.album);
         }
-    }, []);
+    }, [route.params]);
 
     const atualizar = () => {
-        const musica = {
-            id: id,
-            titulo: titulo,
-            duracao: duracao,
-            artista: artista,
-            genero: genero,
-            nacionalidade: nacionalidade,
-            ano_lancamento: ano_lancamento,
-            album: album,
+        const musica: Musica = {
+            id,
+            titulo,
+            duracao,
+            artista,
+            genero,
+            nacionalidade,
+            ano_lancamento,
+            album,
         };
+
         axios.put("http://10.137.11.232:8000/api/update/musica", musica, {
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json"
             }
         }).then(response => {
-
-            if(response.status === 200){
+            if (response.status === 200) {
                 console.log(response.data);
                 navigation.goBack();
             }
-            
         }).catch(error => {
             console.error(error);
+            // Tratamento de erro
         });
     }
 
@@ -75,13 +74,13 @@ const Editar: React.FC = () => {
         <View style={styles.container}>
             <StatusBar backgroundColor='grey' barStyle="light-content" />
             <View>
-                <TextInput value={titulo} onChangeText={setTitulo} style={styles.input} />
-                <TextInput value={duracao} onChangeText={setDuracao} style={styles.input} />
-                <TextInput value={artista} onChangeText={setArtista} style={styles.input} />
-                <TextInput value={genero} onChangeText={setGenero} style={styles.input} />
-                <TextInput value={nacionalidade} onChangeText={setNacionalidade} style={styles.input} />
-                <TextInput value={ano_lancamento} onChangeText={setAno_lancamento} style={styles.input} />
-                <TextInput value={album} onChangeText={setAlbum} style={styles.input} />
+                <TextInput value={titulo} onChangeText={setTitulo} style={styles.input} placeholder="Título" />
+                <TextInput value={duracao.toString()} onChangeText={(text) => setDuracao(parseInt(text))} style={styles.input} placeholder="Duração" keyboardType="numeric" />
+                <TextInput value={artista} onChangeText={setArtista} style={styles.input} placeholder="Artista" />
+                <TextInput value={genero} onChangeText={setGenero} style={styles.input} placeholder="Gênero" />
+                <TextInput value={nacionalidade} onChangeText={setNacionalidade} style={styles.input} placeholder="Nacionalidade" />
+                <TextInput value={ano_lancamento} onChangeText={setAno_lancamento} style={styles.input} placeholder="Ano de Lançamento" keyboardType="numeric" />
+                <TextInput value={album} onChangeText={setAlbum} style={styles.input} placeholder="Álbum" />
                 <TouchableOpacity onPress={atualizar} style={styles.button}>
                     <Text style={styles.buttonText}>Editar</Text>
                 </TouchableOpacity>
