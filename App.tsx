@@ -22,7 +22,7 @@ function App():JSX.Element{
       <Stack.Screen name='Cadastro' component={Cadastro} options={{headerShown:false}} />
       <Stack.Screen name='Update' component={Editar} options={{headerShown:false}} />
       <Stack.Screen name='DetalhesMusica' component={DetalhesMusica} options={{headerShown:false}} />
-      DetalhesMusica
+     
     </Stack.Navigator>
   </NavigationContainer>
 
