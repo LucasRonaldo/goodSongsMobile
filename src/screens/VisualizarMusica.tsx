@@ -1,8 +1,8 @@
+import React, { useEffect, useRef, useState } from "react";
+import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Modalize } from 'react-native-modalize';
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { Modal, Pressable, Alert, FlatList, Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import Footer from "./Footer";
 
 interface Musica {
     id: number;
@@ -17,32 +17,52 @@ interface Musica {
 
 function VisualizarMusica(): React.JSX.Element {
     const [musicas, setMusicas] = useState<Musica[]>([]);
+    const [selectedMusica, setSelectedMusica] = useState<Musica | null>(null);
+    const [error, setError] = useState<string | null>(null); // Estado para exibir mensagens de erro
     const navigation = useNavigation();
-    
+
+    const modalizeRef = useRef<Modalize>(null);
+
+    const onOpen = (event: any) => {
+        event.persist(); // Persistindo o evento sintético
+        modalizeRef.current?.open();
+    };
+
+    const selectMusica = (musica: Musica) => {
+        setSelectedMusica(musica);
+        if (modalizeRef.current) {
+            setSelectedMusica(musica);
+            setTimeout(() => {
+                modalizeRef.current?.open();
+            }, 0);
+        }
+    };
 
     const buscar = async (titulo: string) => {
         try {
             const response = await axios.post('http://10.137.11.223:8000/api/pesquisar/musica/titulo', { titulo });
-            console.log('buscando os dados');
             if (response.status === 200) {
-                console.log(response.data.data)
                 setMusicas(response.data.data);
             } else {
-                console.log('Erro na busca:', response.data.data);
+                setError('Erro na busca');
             }
         } catch (error) {
-            console.log('Erro na requisição:', error);
+            setError('Erro na requisição');
         }
     };
 
     const Delete = async (id: number) => {
-        axios.delete(`http://10.137.11.223:8000/api/delete/musica/${id}`).then(function (response) {
+        try {
+            const response = await axios.delete(`http://10.137.11.223:8000/api/delete/musica/${id}`);
             if (response.status === 200) {
-                Alert.alert('Musica Excluida com sucesso');
+                setMusicas(prevMusicas => prevMusicas.filter(musica => musica.id !== id));
+                showToast('Música excluída com sucesso');
+            } else {
+                setError('Erro ao excluir música');
             }
-        }).catch(function (error) {
-            console.log(error);
-        });
+        } catch (error) {
+            setError('Erro ao excluir música');
+        }
     };
 
     const listarMusicas = async () => {
@@ -52,7 +72,7 @@ function VisualizarMusica(): React.JSX.Element {
                 setMusicas(response.data.data);
             }
         } catch (error) {
-            console.log(error);
+            setError('Erro ao carregar músicas');
         }
     };
 
@@ -62,7 +82,7 @@ function VisualizarMusica(): React.JSX.Element {
 
     const renderItem = ({ item }: { item: Musica }) => (
         <View style={styles.form}>
-            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('DetalhesMusica', { musica: item })}>
+            <TouchableOpacity style={styles.card} onPress={() => selectMusica(item)}>
                 <Image style={styles.imagem} source={require('../images/musica.png')} />
                 <View style={styles.column}>
                     <Text style={styles.titulo}>{item.titulo}</Text>
@@ -78,6 +98,13 @@ function VisualizarMusica(): React.JSX.Element {
         </View>
     );
 
+    const showToast = (message: string) => {
+        setError(message);
+        setTimeout(() => {
+            setError(null);
+        }, 3000); // Esconde a mensagem após 3 segundos
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -91,7 +118,12 @@ function VisualizarMusica(): React.JSX.Element {
                     />
                 </View>
             </View>
-            {musicas.length === 0? (
+            {error && (
+                <View style={styles.errorContainer}>
+                    <Text style={styles.errorText}>{error}</Text>
+                </View>
+            )}
+            {musicas.length === 0 ? (
                 <View style={styles.noItemsContainer}>
                     <Text style={styles.noItemsText}>Não há nenhum registro</Text>
                 </View>
@@ -103,7 +135,30 @@ function VisualizarMusica(): React.JSX.Element {
                     keyExtractor={(item) => item.id.toString()}
                 />
             )}
-            <Footer />
+            <Modalize ref={modalizeRef}>
+    {selectedMusica && (
+        <View style={styles.modalContent}>
+
+            <Text>{selectedMusica.titulo}</Text>
+            <Text>{selectedMusica.artista}</Text>
+            <Text>{selectedMusica.duracao}</Text>
+            <Text>{selectedMusica.genero}</Text>
+            
+            
+            <View style={styles.controls}>
+                <TouchableOpacity onPress={() => {/* Adicione a lógica para o botão de voltar */}}>
+                    <Image style={styles.controlButton} source={require('../images/back.png')} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {/* Adicione a lógica para o botão de pausar/reproduzir */}}>
+                    <Image style={styles.controlButton} source={require('../images/play.png')} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {/* Adicione a lógica para o botão de pausar/reproduzir */}}>
+                    <Image style={styles.controlButton} source={require('../images/forward.png')} />
+                </TouchableOpacity>
+            </View>
+        </View>
+    )}
+</Modalize>
         </View>
     );
 }
@@ -256,6 +311,50 @@ const styles = StyleSheet.create({
     noItemsText: {
         fontSize: 18,
         color: '#999',
+    }, modalContent: {
+        backgroundColor: 'grey',
+        padding: 20,
+        borderRadius:40
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    modalText: {
+        fontSize: 16,
+        marginBottom: 5,
+    },
+    errorContainer: {
+        backgroundColor: 'red',
+        padding: 10,
+        marginBottom: 10,
+        alignItems: 'center',
+    },
+    errorText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    modalContent: {
+        backgroundColor: 'grey',
+        padding: 20,
+        borderRadius: 40,
+        alignItems: 'center',
+    },
+    modalImage: {
+        width: 200,
+        height: 200,
+        borderRadius: 10,
+        marginBottom: 20,
+    },
+    controls: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    controlButton: {
+        width: 50,
+        height: 50,
+        marginHorizontal: 10,
     },
 
 })

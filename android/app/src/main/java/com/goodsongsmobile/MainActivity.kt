@@ -12,6 +12,11 @@ class MainActivity : ReactActivity() {
    * rendering of the component.
    */
   override fun getMainComponentName(): String = "goodSongsMobile"
+  
+  @Override
+  protected String getMainComponentName() {
+    return "Example";
+  }
 
   /**
    * Returns the instance of the [ReactActivityDelegate]. We use [DefaultReactActivityDelegate]

@@ -5,34 +5,34 @@ import { Image } from 'react-native-animatable';
 
 
 const DetalhesMusica = ({ route }) => {
-    
+
     const { musica } = route.params;
 
-    
+
     return (
         <View style={styles.container}>
 
-<View style={styles.containerLogo}>
+            <View style={styles.containerLogo}>
                 <Image
                     source={require('../images/play.png')}
                     style={{ width: '100%' }}
                     resizeMode="contain"
                 />
-                
-            
+
+
             </View>
-            <View   style={styles.containerForm}>
+            <View style={styles.containerForm}>
                 <Text style={styles.title}>{musica.titulo}</Text>
                 <Text style={styles.text}>{musica.artista}</Text>
-               <Text style={styles.text}>{musica.duracao}</Text>
+                <Text style={styles.text}>{musica.duracao}</Text>
                 <Text style={styles.text}>{musica.genero}</Text>
                 <Text style={styles.text}>{musica.nacionalidade}</Text>
                 <Text style={styles.text}>{musica.ano_lancamento}</Text>
                 <TouchableOpacity style={styles.button}>
-                    <Image style={styles.play} source={require('../images/playy.png')}/>
+                    <Image style={styles.play} source={require('../images/playy.png')} />
                 </TouchableOpacity>
             </View>
-           
+
         </View>
     );
 };
@@ -80,9 +80,9 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontWeight: 'bold',
     },
-    play:{
-        width:50,
-        height:50
+    play: {
+        width: 50,
+        height: 50
     }
 });
 
